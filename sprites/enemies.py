@@ -4,9 +4,10 @@ import pygame
 
 from events import ADD_ENEMY
 from speed import Speed
+from sprites.base import MoeSprite
 
 
-class Cactus(pygame.sprite.Sprite):
+class Cactus(MoeSprite):
     def __init__(self, image: pygame.Surface, speed: Speed) -> None:
         super().__init__()
         self.image = image
@@ -21,12 +22,13 @@ class Cactus(pygame.sprite.Sprite):
         if self.pos_x >= w_screen + w_image:
             pygame.event.post(pygame.event.Event(ADD_ENEMY))
             self.kill()
-        x = -self.pos_x + w_screen
-        y = h_screen - h_image
-        screen.blit(self.image, (x, y))
+        self.x = -self.pos_x + w_screen
+        self.y = h_screen - h_image
+        self.render(screen)
+        # screen.blit(self.image, (x, y))
 
 
-class Pterodactyl(pygame.sprite.Sprite):
+class Pterodactyl(MoeSprite):
     def __init__(self, images: list[pygame.Surface], speed: Speed) -> None:
         super().__init__()
         self.images = images
@@ -50,6 +52,5 @@ class Pterodactyl(pygame.sprite.Sprite):
         if self.pos_x >= w_screen + w_image:
             pygame.event.post(pygame.event.Event(ADD_ENEMY))
             self.kill()
-        x = -self.pos_x + w_screen
-        y = self.y
-        screen.blit(self.image, (x, y))
+        self.x = -self.pos_x + w_screen
+        self.render(screen)

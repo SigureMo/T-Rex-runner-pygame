@@ -2,8 +2,10 @@ from enum import Enum
 
 import pygame
 
+from sprites.base import MoeSprite
 
-class Dinosaur(pygame.sprite.Sprite):
+
+class Dinosaur(MoeSprite):
     def __init__(self, images: list[pygame.Surface]) -> None:
         super().__init__()
         self.images = images
@@ -47,12 +49,12 @@ class Dinosaur(pygame.sprite.Sprite):
                 self.jumping_index = 0
                 self.status = DinosaurStatus.RUNNING
 
-        x = 20
+        self.x = 20
         if self.status == DinosaurStatus.JUMPING:
-            y = h_screen - h_image - Dinosaur.jumping_height(self.jumping_index)
+            self.y = h_screen - h_image - Dinosaur.jumping_height(self.jumping_index)
         else:
-            y = h_screen - h_image
-        screen.blit(self.image, (x, y))
+            self.y = h_screen - h_image
+        self.render(screen)
 
 
 class DinosaurStatus(Enum):
