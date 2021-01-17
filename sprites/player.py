@@ -2,10 +2,10 @@ from enum import Enum
 
 import pygame
 
-from sprites.base import MoeSprite
+from sprites.base import SpriteBase
 
 
-class Dinosaur(MoeSprite):
+class Dinosaur(SpriteBase):
     def __init__(self, images: list[pygame.Surface]) -> None:
         super().__init__()
         self.images = images

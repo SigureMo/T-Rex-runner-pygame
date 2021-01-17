@@ -8,6 +8,7 @@ from backgroud import Cloud, Desert
 from events import ADD_ENEMY
 from sprites.enemies import Pterodactyl, Cactus
 from sprites.player import Dinosaur
+from sprites.collision import detect_collision_by_alpha_channel
 from speed import Speed, SpeedRatio
 
 assets_paths = {
@@ -38,8 +39,8 @@ assets_paths = {
 def main():
     pygame.init()
     pygame.display.set_caption("T-Rex Pygame")
-    size = (1000, 350)
-    screen = pygame.display.set_mode(size)
+    screen_size = (1000, 350)
+    screen = pygame.display.set_mode(screen_size)
     clock = pygame.time.Clock()
 
     score = 0.0
@@ -62,8 +63,6 @@ def main():
     enemies = pygame.sprite.Group()
     enemies.add(Cactus(cactus_images[0], speed=background_speed))
 
-    # print(pygame.surfarray.array_alpha(cactus_images[0]))
-
     done = False
     while not done:
         clock.tick(60)
@@ -80,10 +79,8 @@ def main():
                     cactus_image = random.choice(cactus_images)
                     enemies.add(Cactus(cactus_image, speed=background_speed))
 
-        # print(type(pressed_keys))
         speed_ratio.update()
         score += background_speed.value * 0.1
-        # print(speed_ratio.value)
 
         desert.update(screen)
         for enemy in enemies:
@@ -93,6 +90,10 @@ def main():
         dinosaur.update(screen)
         pressed_keys = pygame.key.get_pressed()
         dinosaur.handle_event(pressed_keys)
+
+        for enemy in enemies:
+            if detect_collision_by_alpha_channel(dinosaur, enemy, screen, plot_mask=True):
+                print("Collision!")
 
         pygame.display.flip()
 

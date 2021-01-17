@@ -25,7 +25,6 @@ class Cactus(SpriteBase):
         self.x = -self.pos_x + w_screen
         self.y = h_screen - h_image
         self.render(screen)
-        # screen.blit(self.image, (x, y))
 
 
 class Pterodactyl(SpriteBase):
