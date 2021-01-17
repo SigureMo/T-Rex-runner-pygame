@@ -46,7 +46,8 @@ class Cloud:
 class Score:
     dump_file = "./score.json"
 
-    def __init__(self, speed: Speed) -> None:
+    def __init__(self, font: pygame.font.Font, speed: Speed) -> None:
+        self.font = font
         self.speed = speed
         self.value = 0.0
         self.highest_value = 0.0
@@ -64,6 +65,5 @@ class Score:
         if self.value > self.highest_value:
             self.highest_value = self.value
 
-        font = pygame.font.Font("./fonts/DinkieBitmap-7pxDemo.ttf", 30)
-        text = font.render(f"HI {int(self.highest_value):05} {int(self.value):05}", True, (83, 83, 83))
+        text = self.font.render(f"HI {int(self.highest_value):05} {int(self.value):05}", True, (83, 83, 83))
         screen.blit(text, (w_screen - 10 - text.get_size()[0], 30))

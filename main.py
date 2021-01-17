@@ -35,6 +35,7 @@ assets_paths = {
         "./images/dinosaur/creeping_1.png",
         "./images/dinosaur/creeping_2.png",
     ],
+    "font": "./fonts/DinkieBitmap-7pxDemo.ttf",
 }
 
 
@@ -64,7 +65,7 @@ def main():
     dinosaur = Dinosaur(dinosaur_images)
     enemies = pygame.sprite.Group()
     enemies.add(Cactus(cactus_images[0], speed=background_speed))
-    score = Score(speed=background_speed)
+    score = Score(font=pygame.font.Font(assets_paths["font"], 30), speed=background_speed)
 
     done = False
     while not done:
@@ -82,7 +83,6 @@ def main():
                     enemies.add(Cactus(cactus_image, speed=background_speed))
 
         speed_ratio.update()
-        # score += background_speed.value * 0.1
 
         desert.update(screen)
         for enemy in enemies:
