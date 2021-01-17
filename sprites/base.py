@@ -1,7 +1,7 @@
 import pygame
 
 
-class MoeSprite(pygame.sprite.Sprite):
+class SpriteBase(pygame.sprite.Sprite):
     def __init__(self) -> None:
         super().__init__()
 

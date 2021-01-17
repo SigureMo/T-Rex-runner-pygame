@@ -4,10 +4,10 @@ import pygame
 
 from events import ADD_ENEMY
 from speed import Speed
-from sprites.base import MoeSprite
+from sprites.base import SpriteBase
 
 
-class Cactus(MoeSprite):
+class Cactus(SpriteBase):
     def __init__(self, image: pygame.Surface, speed: Speed) -> None:
         super().__init__()
         self.image = image
@@ -28,7 +28,7 @@ class Cactus(MoeSprite):
         # screen.blit(self.image, (x, y))
 
 
-class Pterodactyl(MoeSprite):
+class Pterodactyl(SpriteBase):
     def __init__(self, images: list[pygame.Surface], speed: Speed) -> None:
         super().__init__()
         self.images = images
