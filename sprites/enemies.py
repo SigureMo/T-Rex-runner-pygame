@@ -1,0 +1,55 @@
+import random
+
+import pygame
+
+from events import ADD_ENEMY
+from speed import Speed
+
+
+class Cactus(pygame.sprite.Sprite):
+    def __init__(self, image: pygame.Surface, speed: Speed) -> None:
+        super().__init__()
+        self.image = image
+        self.pos_x = 0
+        self.speed = speed
+
+    def update(self, screen: pygame.Surface):
+        w_screen, h_screen = screen.get_size()
+        w_image, h_image = self.image.get_size()
+        self.pos_x += self.speed.value
+
+        if self.pos_x >= w_screen + w_image:
+            pygame.event.post(pygame.event.Event(ADD_ENEMY))
+            self.kill()
+        x = -self.pos_x + w_screen
+        y = h_screen - h_image
+        screen.blit(self.image, (x, y))
+
+
+class Pterodactyl(pygame.sprite.Sprite):
+    def __init__(self, images: list[pygame.Surface], speed: Speed) -> None:
+        super().__init__()
+        self.images = images
+        self.pos_x = 0
+        self.y = random.randint(100, 200)
+        self.speed = speed
+        self.index = 0
+        self.num_flap = 10
+
+    @property
+    def image(self) -> pygame.Surface:
+        return self.images[self.index // self.num_flap]
+
+    def update(self, screen: pygame.Surface):
+        w_screen, h_screen = screen.get_size()
+        w_image, h_image = self.image.get_size()
+        self.pos_x += self.speed.value
+        self.index += 1
+        self.index %= self.num_flap * 2
+
+        if self.pos_x >= w_screen + w_image:
+            pygame.event.post(pygame.event.Event(ADD_ENEMY))
+            self.kill()
+        x = -self.pos_x + w_screen
+        y = self.y
+        screen.blit(self.image, (x, y))
