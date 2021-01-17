@@ -1,10 +1,12 @@
 import math
 import random
+import time
+
 import pygame
 import numpy as np
 import matplotlib.pyplot as plt
 
-from backgroud import Cloud, Desert
+from backgroud import Cloud, Desert, Score
 from events import ADD_ENEMY
 from sprites.enemies import Pterodactyl, Cactus
 from sprites.player import Dinosaur
@@ -43,7 +45,7 @@ def main():
     screen = pygame.display.set_mode(screen_size)
     clock = pygame.time.Clock()
 
-    score = 0.0
+    # score = 0.0
     speed_ratio = SpeedRatio()
     background_speed = Speed(8.0, speed_ratio)
     cloud_speed = Speed(1.0, speed_ratio)
@@ -62,10 +64,10 @@ def main():
     dinosaur = Dinosaur(dinosaur_images)
     enemies = pygame.sprite.Group()
     enemies.add(Cactus(cactus_images[0], speed=background_speed))
+    score = Score(speed=background_speed)
 
     done = False
     while not done:
-        clock.tick(60)
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
@@ -73,14 +75,14 @@ def main():
             elif event.type == pygame.QUIT:
                 done = True
             elif event.type == ADD_ENEMY:
-                if score > 1000 and random.random() < 0.2:
+                if score.value > 100 and random.random() < 0.2:
                     enemies.add(Pterodactyl(pterodactyl_images, speed=background_speed))
                 else:
                     cactus_image = random.choice(cactus_images)
                     enemies.add(Cactus(cactus_image, speed=background_speed))
 
         speed_ratio.update()
-        score += background_speed.value * 0.1
+        # score += background_speed.value * 0.1
 
         desert.update(screen)
         for enemy in enemies:
@@ -88,14 +90,16 @@ def main():
         for cloud in clouds:
             cloud.update(screen)
         dinosaur.update(screen)
+        score.update(screen)
         pressed_keys = pygame.key.get_pressed()
         dinosaur.handle_event(pressed_keys)
 
         for enemy in enemies:
-            if detect_collision_by_alpha_channel(dinosaur, enemy, screen, plot_mask=True):
-                print("Collision!")
+            if detect_collision_by_alpha_channel(dinosaur, enemy, screen, plot_mask=False):
+                print(f"[INFO] {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} Collision!")
 
         pygame.display.flip()
+        clock.tick(60)
 
 
 if __name__ == "__main__":

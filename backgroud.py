@@ -1,4 +1,6 @@
 import math
+import json
+import os
 
 import pygame
 
@@ -39,3 +41,29 @@ class Cloud:
         self.x -= self.speed.value
         self.x %= w_screen + w_image
         screen.blit(self.image, (self.x - w_image, self.y))
+
+
+class Score:
+    dump_file = "./score.json"
+
+    def __init__(self, speed: Speed) -> None:
+        self.speed = speed
+        self.value = 0.0
+        self.highest_value = 0.0
+        if os.path.isfile(Score.dump_file):
+            with open(Score.dump_file, "r", encoding="utf-8") as f:
+                self.highest_value = json.load(f)["highest_score"]
+
+    def __del__(self):
+        with open(Score.dump_file, "w", encoding="utf-8") as f:
+            json.dump({"highest_score": self.highest_value}, f, indent=2)
+
+    def update(self, screen: pygame.Surface) -> None:
+        w_screen, h_screen = screen.get_size()
+        self.value += self.speed.value * 0.01
+        if self.value > self.highest_value:
+            self.highest_value = self.value
+
+        font = pygame.font.Font("./fonts/DinkieBitmap-7pxDemo.ttf", 30)
+        text = font.render(f"HI {int(self.highest_value):05} {int(self.value):05}", True, (83, 83, 83))
+        screen.blit(text, (w_screen - 10 - text.get_size()[0], 30))
