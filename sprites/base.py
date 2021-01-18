@@ -20,7 +20,7 @@ class SpriteBase(pygame.sprite.Sprite):
         img_arr = pygame.surfarray.array_alpha(self.image)
         x1, x2 = int(self.x), int(self.x) + w
         y1, y2 = int(self.y), int(self.y) + h
-        if x1 == x2 or y1 == y2:
+        if x2 <= 0 or x1 > w_screen or y2 <= 0 or y1 > h_screen:
             return screen_tp
 
         screen_tp[max(x1, 0) : min(x2, w_screen), max(y1, 0) : min(y2, h_screen)] = img_arr[
