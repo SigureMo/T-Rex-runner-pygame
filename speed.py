@@ -38,8 +38,3 @@ class Speed:
 
 def sigmoid(x: float) -> float:
     return 1 / (1 + np.exp(-x))
-
-
-if __name__ == "__main__":
-    speed_ratio = SpeedRatio()
-    print(sigmoid(10) * 2)
