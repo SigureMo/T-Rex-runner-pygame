@@ -5,7 +5,7 @@ import pygame
 from backgroud import Cloud, Desert, Score
 from events import ADD_ENEMY
 from sprites.enemies import Pterodactyl, Cactus
-from sprites.player import Dinosaur
+from sprites.player import TRex
 from sprites.collision import detect_collision_by_alpha_channel
 from speed import Speed, SpeedRatio
 from gameover import GameOver
@@ -27,10 +27,10 @@ assets_paths = {
         "./images/pterodactyl/pterodactyl_2.png",
     ],
     "dinosaur": [
-        "./images/dinosaur/standing_1.png",
-        "./images/dinosaur/standing_2.png",
-        "./images/dinosaur/creeping_1.png",
-        "./images/dinosaur/creeping_2.png",
+        "./images/t-rex/standing_1.png",
+        "./images/t-rex/standing_2.png",
+        "./images/t-rex/creeping_1.png",
+        "./images/t-rex/creeping_2.png",
     ],
     "gameover": "./images/gameover.png",
     "restart": "./images/restart.png",
@@ -40,7 +40,7 @@ assets_paths = {
 
 def main():
     pygame.init()
-    pygame.display.set_caption("T-Rex Running Pygame")
+    pygame.display.set_caption("T-Rex Runner Pygame")
     screen_size = (1000, 350)
     fps = 60
     screen = pygame.display.set_mode(screen_size)
@@ -65,7 +65,7 @@ def main():
         Cloud(cloud_image, 10, 50, speed=cloud_speed),
         Cloud(cloud_image, 500, 70, speed=cloud_speed),
     ]
-    dinosaur = Dinosaur(dinosaur_images)
+    t_rex = TRex(dinosaur_images)
     enemies = pygame.sprite.Group()
     enemies.add(Cactus(cactus_images[0], speed=background_speed))
     score = Score(font=pygame.font.Font(assets_paths["font"], 30), speed=background_speed)
@@ -105,13 +105,13 @@ def main():
                 enemy.update(screen)
             for cloud in clouds:
                 cloud.update(screen)
-            dinosaur.update(screen)
+            t_rex.update(screen)
             score.update(screen)
             pressed_keys = pygame.key.get_pressed()
-            dinosaur.handle_events(pressed_keys)
+            t_rex.handle_events(pressed_keys)
 
             for enemy in enemies:
-                if detect_collision_by_alpha_channel(dinosaur, enemy, screen, plot_mask=False):
+                if detect_collision_by_alpha_channel(t_rex, enemy, screen, plot_mask=False):
                     gameover.is_gameover = True
                     break
 
