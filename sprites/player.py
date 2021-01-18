@@ -26,9 +26,9 @@ class Dinosaur(SpriteBase):
     @staticmethod
     def jumping_height(t: float) -> float:
         t *= 0.01
-        return 1000 * (t - 2 * t ** 2)
+        return 1500 * (t - 3 * t ** 2)
 
-    def handle_event(self, pressed_keys: pygame.key.ScancodeWrapper) -> None:
+    def handle_events(self, pressed_keys: pygame.key.ScancodeWrapper) -> None:
         if self.status != DinosaurStatus.JUMPING:
             self.status = DinosaurStatus.RUNNING
             if pressed_keys[pygame.K_UP] or pressed_keys[pygame.K_SPACE]:

@@ -15,7 +15,7 @@ class GameOver:
         screen.blit(self.gameover_image, ((w_screen - w_gameover) / 2, (h_screen - h_gameover) / 2 - 20))
         screen.blit(self.restart_image, ((w_screen - w_restart) / 2, (h_screen - h_restart) / 2 + 50))
 
-    def handle_event(self, pressed_keys: pygame.key.ScancodeWrapper) -> None:
+    def handle_events(self, pressed_keys: pygame.key.ScancodeWrapper) -> None:
         if self.is_gameover:
             if pressed_keys[pygame.K_UP] or pressed_keys[pygame.K_DOWN] or pressed_keys[pygame.K_SPACE]:
                 self.is_gameover = False

@@ -1,10 +1,6 @@
-import math
 import random
-import time
 
 import pygame
-import numpy as np
-import matplotlib.pyplot as plt
 
 from backgroud import Cloud, Desert, Score
 from events import ADD_ENEMY
@@ -48,6 +44,7 @@ def main():
     screen_size = (1000, 350)
     fps = 60
     screen = pygame.display.set_mode(screen_size)
+    screen.fill((255, 255, 255))
     clock = pygame.time.Clock()
 
     # score = 0.0
@@ -92,7 +89,8 @@ def main():
         if gameover.is_gameover:
             gameover.update(screen)
             pressed_keys = pygame.key.get_pressed()
-            gameover.handle_event(pressed_keys)
+            gameover.handle_events(pressed_keys)
+            # 开始新游戏
             if not gameover.is_gameover:
                 for enemy in enemies:
                     enemy.kill()
@@ -110,7 +108,7 @@ def main():
             dinosaur.update(screen)
             score.update(screen)
             pressed_keys = pygame.key.get_pressed()
-            dinosaur.handle_event(pressed_keys)
+            dinosaur.handle_events(pressed_keys)
 
             for enemy in enemies:
                 if detect_collision_by_alpha_channel(dinosaur, enemy, screen, plot_mask=False):
