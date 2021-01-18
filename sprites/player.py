@@ -31,7 +31,7 @@ class Dinosaur(SpriteBase):
     def handle_event(self, pressed_keys: pygame.key.ScancodeWrapper) -> None:
         if self.status != DinosaurStatus.JUMPING:
             self.status = DinosaurStatus.RUNNING
-            if pressed_keys[pygame.K_UP]:
+            if pressed_keys[pygame.K_UP] or pressed_keys[pygame.K_SPACE]:
                 self.status = DinosaurStatus.JUMPING
             elif pressed_keys[pygame.K_DOWN]:
                 self.status = DinosaurStatus.CREEPING

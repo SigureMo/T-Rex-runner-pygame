@@ -12,6 +12,7 @@ from sprites.enemies import Pterodactyl, Cactus
 from sprites.player import Dinosaur
 from sprites.collision import detect_collision_by_alpha_channel
 from speed import Speed, SpeedRatio
+from gameover import GameOver
 
 assets_paths = {
     "desert": "./images/desert.png",
@@ -35,14 +36,17 @@ assets_paths = {
         "./images/dinosaur/creeping_1.png",
         "./images/dinosaur/creeping_2.png",
     ],
+    "gameover": "./images/gameover.png",
+    "restart": "./images/restart.png",
     "font": "./fonts/DinkieBitmap-7pxDemo.ttf",
 }
 
 
 def main():
     pygame.init()
-    pygame.display.set_caption("T-Rex Pygame")
+    pygame.display.set_caption("T-Rex Running Pygame")
     screen_size = (1000, 350)
+    fps = 60
     screen = pygame.display.set_mode(screen_size)
     clock = pygame.time.Clock()
 
@@ -56,6 +60,8 @@ def main():
     cactus_images = [pygame.image.load(img_path) for img_path in assets_paths["cactuses"]]
     pterodactyl_images = [pygame.image.load(img_path) for img_path in assets_paths["pterodactyl"]]
     dinosaur_images = [pygame.image.load(img_path) for img_path in assets_paths["dinosaur"]]
+    gameover_image = pygame.image.load(assets_paths["gameover"])
+    restart_image = pygame.image.load(assets_paths["restart"])
 
     desert = Desert(desert_image, speed=background_speed)
     clouds = [
@@ -66,6 +72,7 @@ def main():
     enemies = pygame.sprite.Group()
     enemies.add(Cactus(cactus_images[0], speed=background_speed))
     score = Score(font=pygame.font.Font(assets_paths["font"], 30), speed=background_speed)
+    gameover = GameOver(gameover_image, restart_image)
 
     done = False
     while not done:
@@ -82,24 +89,36 @@ def main():
                     cactus_image = random.choice(cactus_images)
                     enemies.add(Cactus(cactus_image, speed=background_speed))
 
-        speed_ratio.update()
+        if gameover.is_gameover:
+            gameover.update(screen)
+            pressed_keys = pygame.key.get_pressed()
+            gameover.handle_event(pressed_keys)
+            if not gameover.is_gameover:
+                for enemy in enemies:
+                    enemy.kill()
+                enemies.add(Cactus(cactus_images[0], speed=background_speed))
+                score.clear()
+                speed_ratio.reset()
+        else:
+            speed_ratio.update()
 
-        desert.update(screen)
-        for enemy in enemies:
-            enemy.update(screen)
-        for cloud in clouds:
-            cloud.update(screen)
-        dinosaur.update(screen)
-        score.update(screen)
-        pressed_keys = pygame.key.get_pressed()
-        dinosaur.handle_event(pressed_keys)
+            desert.update(screen)
+            for enemy in enemies:
+                enemy.update(screen)
+            for cloud in clouds:
+                cloud.update(screen)
+            dinosaur.update(screen)
+            score.update(screen)
+            pressed_keys = pygame.key.get_pressed()
+            dinosaur.handle_event(pressed_keys)
 
-        for enemy in enemies:
-            if detect_collision_by_alpha_channel(dinosaur, enemy, screen, plot_mask=False):
-                print(f"[INFO] {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())} Collision!")
+            for enemy in enemies:
+                if detect_collision_by_alpha_channel(dinosaur, enemy, screen, plot_mask=False):
+                    gameover.is_gameover = True
+                    break
 
         pygame.display.flip()
-        clock.tick(60)
+        clock.tick(fps)
 
 
 if __name__ == "__main__":

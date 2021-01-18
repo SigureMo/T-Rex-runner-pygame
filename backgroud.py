@@ -67,3 +67,6 @@ class Score:
 
         text = self.font.render(f"HI {int(self.highest_value):05} {int(self.value):05}", True, (83, 83, 83))
         screen.blit(text, (w_screen - 10 - text.get_size()[0], 30))
+
+    def clear(self) -> None:
+        self.value = 0.0
